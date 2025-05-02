@@ -73,64 +73,34 @@ def health():
     }
     return jsonify(status), 200
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    """
-    Request format:
-    {
-        "user_id": "user123",
-        "candidate_songs": ["song1", "song2", "song3"],
-        "k": 10  # optional, number of recommendations to return
-    }
-    """
-    try:
-        data = request.get_json()
-        user_id = data["user_id"]
-        candidate_songs = data["candidate_songs"]
-        k = data.get("k", 10)
-        
-        # Convert to internal indices
-        user_idx = model_loader.user_mapping.get(int(user_id))
-        if user_idx is None:
-            return jsonify({"error": "User not found in model"}), 404
-            
-        song_indices = []
-        valid_songs = []
-        for song in candidate_songs:
-            song_idx = model_loader.item_mapping.get(int(song))
-            if song_idx is not None:
-                song_indices.append(song_idx)
-                valid_songs.append(song)
-        
-        if not song_indices:
-            return jsonify({"error": "No valid candidate songs found"}), 400
-        
-        # Create dummy user-item matrix (all zeros)
-        user_items = csr_matrix((1, len(model_loader.item_mapping)))
-        
-        # Get recommendations
-        rec_indices, _ = model_loader.model.recommend(
-            userid=user_idx,
-            user_items=user_items,
-            N=k,
-            items=song_indices,
-            filter_already_liked_items=False
-        )
-        
-        # Convert back to song IDs
-        recommendations = []
-        for idx in rec_indices:
-            song_id = list(model_loader.item_mapping.keys())[list(model_loader.item_mapping.values()).index(idx)]
-            recommendations.append(str(song_id))
-        
-        return jsonify({
-            "user_id": user_id,
-            "recommendations": recommendations,
-            "valid_candidates": valid_songs
-        })
-        
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+@app.route("/recommend", methods=["POST"])
+def recommend():
+    data = request.get_json()
+    user_id = data.get("user_id")
+    top_k = data.get("top_k", 10)
+    
+    if user_id not in model_loader.user_mapping:
+        return jsonify({"error": "User not found in training data"}), 404
+
+    uidx = model_loader.user_mapping[user_id]
+    user_interactions = csr_matrix((1, len(model_loader.item_mapping)))
+    
+    recs, scores = model_loader.model.recommend(
+        uidx,
+        user_interactions,
+        N=top_k,
+        filter_already_liked_items=False
+    )
+
+    # Invert item mapping for readability
+    item_mapping_inv = {v: k for k, v in model_loader.item_mapping.items()}
+    recommended_items = [item_mapping_inv[i] for i in recs]
+
+    return jsonify({
+        "user_id": user_id,
+        "recommendations": recommended_items
+    })
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002)
