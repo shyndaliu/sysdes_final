@@ -25,7 +25,7 @@ df = df.sort_values("timestamp").reset_index(drop=True)
 split_index = int(len(df) * 0.8)
 split_time = df.loc[split_index, "timestamp"]
 
-# Assign fixed dates based on the 80/20 timestamp split
+# Assign fixed dates based on the 80/20 timestamp split only 2 dates as was too lazy to deal with partitions
 df["date"] = df["timestamp"].apply(lambda x: pd.to_datetime("2023-07-01") if x <= split_time else pd.to_datetime("2023-07-06"))
 
 # Final format

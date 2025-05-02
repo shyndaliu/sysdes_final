@@ -9,7 +9,8 @@ default_args = {
     'retries': 1,
 }
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+PROJECT_ROOT = '/opt/project'
+
 
 CLICKHOUSE_PATH = os.path.join(PROJECT_ROOT, 'clickhouse')
 MLFLOW_PATH = os.path.join(PROJECT_ROOT, 'mlflow')

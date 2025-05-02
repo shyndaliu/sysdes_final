@@ -1,0 +1,25 @@
+[2025-05-02T20:17:31.254+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: sysdes_component_pipeline.start_clickhouse manual__2025-05-02T20:17:30.123335+00:00 [queued]>
+[2025-05-02T20:17:31.257+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: sysdes_component_pipeline.start_clickhouse manual__2025-05-02T20:17:30.123335+00:00 [queued]>
+[2025-05-02T20:17:31.258+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2025-05-02T20:17:31.262+0000] {taskinstance.py:2191} INFO - Executing <Task(BashOperator): start_clickhouse> on 2025-05-02 20:17:30.123335+00:00
+[2025-05-02T20:17:31.265+0000] {standard_task_runner.py:60} INFO - Started process 49 to run task
+[2025-05-02T20:17:31.268+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'sysdes_component_pipeline', 'start_clickhouse', 'manual__2025-05-02T20:17:30.123335+00:00', '--job-id', '3', '--raw', '--subdir', 'DAGS_FOLDER/training-evaluating-hosting.py', '--cfg-path', '/tmp/tmpjecyxr5a']
+[2025-05-02T20:17:31.269+0000] {standard_task_runner.py:88} INFO - Job 3: Subtask start_clickhouse
+[2025-05-02T20:17:31.304+0000] {task_command.py:423} INFO - Running <TaskInstance: sysdes_component_pipeline.start_clickhouse manual__2025-05-02T20:17:30.123335+00:00 [running]> on host abbd7ce27b41
+[2025-05-02T20:17:31.340+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='uldana' AIRFLOW_CTX_DAG_ID='sysdes_component_pipeline' AIRFLOW_CTX_TASK_ID='start_clickhouse' AIRFLOW_CTX_EXECUTION_DATE='2025-05-02T20:17:30.123335+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-05-02T20:17:30.123335+00:00'
+[2025-05-02T20:17:31.341+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2025-05-02T20:17:31.342+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', 'cd /opt/clickhouse && docker-compose up -d --build']
+[2025-05-02T20:17:31.351+0000] {subprocess.py:86} INFO - Output:
+[2025-05-02T20:17:31.354+0000] {subprocess.py:93} INFO - /usr/bin/bash: line 1: cd: /opt/clickhouse: No such file or directory
+[2025-05-02T20:17:31.354+0000] {subprocess.py:97} INFO - Command exited with return code 1
+[2025-05-02T20:17:31.361+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/bash.py", line 212, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2025-05-02T20:17:31.364+0000] {taskinstance.py:1138} INFO - Marking task as UP_FOR_RETRY. dag_id=sysdes_component_pipeline, task_id=start_clickhouse, execution_date=20250502T201730, start_date=20250502T201731, end_date=20250502T201731
+[2025-05-02T20:17:31.372+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 3 for task start_clickhouse (Bash command failed. The command returned a non-zero exit code 1.; 49)
+[2025-05-02T20:17:31.407+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2025-05-02T20:17:31.420+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check
