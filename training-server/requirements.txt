@@ -1,0 +1,8 @@
+pandas
+sqlalchemy
+clickhouse-connect
+mlflow
+implicit
+scipy
+joblib
+
